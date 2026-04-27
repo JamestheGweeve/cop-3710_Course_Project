@@ -23,7 +23,7 @@ def main_menu():
     print("4. Analyze Average ADR (Daily Rate) by Hotel")
     print("5. View Stay Summary for a Specific Booking")
     print("0. Exit")
-    print("="*60)
+    print("-"*60)
     choice = input("Enter your choice (0-5): ").strip()
     return choice
 
