@@ -10,6 +10,9 @@ Github:
 
 
 For visual code studio:
+
+pip install pandas
+
 cd "C:\Users\james\Downloads\cop-3710_Course_Project-main\cop-3710_Course_Project-main"
 python preprocess.py
 python dataload.py  
