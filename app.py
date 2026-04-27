@@ -8,15 +8,15 @@ def connect_db():
         print(f"Database '{DB_NAME}' not found.")
         print("   Please run load_data.py first to create and populate the database.")
         exit(1)
-    
+
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row  # Easier rows, remember for later pls
     return conn
 
 def main_menu():
-    print("\n" + "="*60)
-    print("   HOTEL BOOKING MANAGEMENT AND ANALYTICS SYSTEM")
-    print("="*60)
+    print("\n" + "-"*60)
+    print("   HOTEL BOOKING MANAGEMENT AND ANALYTICS MENU")
+    print("-"*60)
     print("1. View All Bookings (with Hotel & Arrival Info)")
     print("2. Search Bookings by Arrival Year Range")
     print("3. View Room & Stay Details for a Specific Booking")
@@ -31,7 +31,7 @@ def feature1(conn):
     """Feature 1: View All Bookings with Hotel Info"""
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT booking_id, 
+        SELECT booking_id,
                hotel,
                arrival_date_year || '-' || arrival_date_month || '-' || arrival_date_day_of_month AS arrival_date,
                is_canceled,
@@ -39,11 +39,10 @@ def feature1(conn):
                adr
         FROM BOOKINGS
         ORDER BY arrival_date_year DESC, arrival_date_month, arrival_date_day_of_month DESC
-        LIMIT 30
     ''')
     rows = cursor.fetchall()
-    
-    print("\n=== ALL BOOKINGS (Most Recent 30) ===")
+
+    print("\n--- ALL BOOKINGS ---")
     print(f"{'ID':<6} {'Hotel':<15} {'Arrival Date':<15} {'Canceled':<8} {'Lead Time':<9} {'ADR':<8}")
     print("-" * 70)
     for row in rows:
@@ -58,10 +57,10 @@ def feature2(conn):
     except ValueError:
         print("Not a valid year.")
         return
-    
+
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT booking_id, 
+        SELECT booking_id,
                hotel,
                arrival_date_year || '-' || arrival_date_month || '-' || arrival_date_day_of_month AS arrival_date,
                is_canceled,
@@ -70,11 +69,10 @@ def feature2(conn):
         FROM BOOKINGS
         WHERE arrival_date_year BETWEEN ? AND ?
         ORDER BY arrival_date_year, arrival_date_month, arrival_date_day_of_month
-        LIMIT 50
     ''', (start_year, end_year))
     rows = cursor.fetchall()
-    
-    print(f"\n=== BOOKINGS FROM {start_year} TO {end_year} ({len(rows)} shown) ===")
+
+    print(f"\n--- BOOKINGS FROM {start_year} TO {end_year} (Total: {len(rows)}) ---")
     print(f"{'ID':<6} {'Hotel':<15} {'Arrival Date':<15} {'Canceled':<8} {'Lead Time':<9} {'ADR':<8}")
     print("-" * 70)
     for row in rows:
@@ -100,9 +98,9 @@ def feature3(conn):
         WHERE booking_id = ?
     ''', (booking_id,))
     row = cursor.fetchone()
-    
+
     if row:
-        print(f"\n=== ROOM & STAY DETAILS FOR BOOKING {booking_id} ===")
+        print(f"\nROOM & STAY DETAILS FOR BOOKING {booking_id}")
         print(f"Hotel                  : {row['hotel']}")
         print(f"Reserved Room Type     : {row['reserved_room_type']}")
         print(f"Assigned Room Type     : {row['assigned_room_type']}")
@@ -127,8 +125,8 @@ def feature4(conn):
         ORDER BY avg_adr DESC
     ''')
     rows = cursor.fetchall()
-    
-    print("\n=== AVERAGE ADR BY HOTEL ===")
+
+    print("\n--- AVERAGE ADR BY HOTEL ---")
     print(f"{'Hotel':<20} {'Avg ADR':<10} {'Bookings':<10} {'Avg Lead Time':<15}")
     print("-" * 60)
     for row in rows:
@@ -151,9 +149,9 @@ def feature5(conn):
         WHERE booking_id = ?
     ''', (booking_id,))
     row = cursor.fetchone()
-    
+
     if row:
-        print(f"\n=== STAY SUMMARY FOR BOOKING {booking_id} ===")
+        print(f"\nSTAY SUMMARY FOR BOOKING {booking_id}")
         print(f"Hotel                     : {row['hotel']}")
         print(f"Weekend Nights            : {row['stays_in_weekend_nights']}")
         print(f"Week Nights               : {row['stays_in_week_nights']}")
@@ -168,7 +166,7 @@ def main():
     print("Connecting to Hotel Booking Database...")
     conn = connect_db()
     print("Connected successfully.\n")
-    
+
     while True:
         choice = main_menu()
         if choice == '1':
@@ -186,7 +184,7 @@ def main():
             break
         else:
             print("Invalid option. Please enter a number 0-5.")
-        
+
         input("\nPress Enter to return to the main menu...")
 
     conn.close()
