@@ -1,7 +1,16 @@
 
 
+
+Github:
 1. install pandas: pip install pandas
 2. use SQlite CLI: sqlite3 hotel_booking.db < create_db.sql
 3. run preprocessor: python preprocess.py
 4. run dataload: python dataload.py
 5. run the app: python app.py
+
+
+For visual code studio:
+cd "C:\Users\james\Downloads\cop-3710_Course_Project-main\cop-3710_Course_Project-main"
+python preprocess.py
+python dataload.py  
+python app.py
